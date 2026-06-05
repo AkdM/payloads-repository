@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Custom Payload Repository · PS5 Payload Manager</title>
+<title>AkdM Payloads Repository · PS5 Payload Manager</title>
 <meta name="description" content="A custom payload repository for the PS5 Payload Manager. Add the URL below to your manager to browse and install these payloads.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -269,7 +269,7 @@
 
   <section class="hero">
     <div class="eyebrow">Custom Repository · repository.json</div>
-    <h1 id="title">Custom <span class="grad">Payload</span> Repository</h1>
+    <h1 id="title">AkdM <span class="grad">Payloads</span> Repository</h1>
     <p class="tag" id="tagline">A third-party payload source for the PS5 Payload Manager.</p>
 
     <div class="url-card">
@@ -307,28 +307,6 @@
   <div id="grid">
     <div class="state"><div class="spin"></div>Loading <code>repository.json</code>…</div>
   </div>
-
-  <details class="schema">
-    <summary>Repository format <span class="chev">▸</span></summary>
-    <div class="body">
-      <p><code>repository.json</code> is a JSON array of payload objects. Fields marked <span class="req">●</span> are required.</p>
-<pre>[
-  {
-    <span class="k">"name"</span>:        "websrv",              <span class="c">// <span class="req">●</span> display name</span>
-    <span class="k">"filename"</span>:    "websrv_v0.32.elf",    <span class="c">// <span class="req">●</span> saved filename (.elf / .bin)</span>
-    <span class="k">"url"</span>:         "https://.../file.elf",<span class="c">// <span class="req">●</span> direct download link</span>
-    <span class="k">"version"</span>:     "v0.32",               <span class="c">// version string</span>
-    <span class="k">"description"</span>: "A simple web server…", <span class="c">// short description</span>
-    <span class="k">"last_update"</span>: "2026-05-25",            <span class="c">// YYYY-MM-DD</span>
-    <span class="k">"checksum"</span>:    "8dd24df1…",            <span class="c">// sha-256 of the file</span>
-    <span class="k">"source"</span>:      "https://github.com/…", <span class="c">// project releases page (optional)</span>
-    <span class="k">"extract_file"</span>:"payload.elf"           <span class="c">// file to pull from a .zip (optional)</span>
-  }
-]</pre>
-      <p>Edit <code>repository.json</code> at the root of this repo, commit, and the changes go live automatically.
-      See the <a href="https://github.com/itsPLK/ps5-payload-manager" target="_blank" rel="noopener">PS5 Payload Manager</a> Custom Repositories Guide for full details.</p>
-    </div>
-  </details>
 
 </main>
 
@@ -389,8 +367,30 @@
 
   fetch(repoJsonUrl, {cache:"no-store"})
     .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
-    .then(function(data){
-      if(!Array.isArray(data)) throw new Error("not an array");
+    .then(function(raw){
+      // Accept either a bare array, or an object wrapping the list under a common key.
+      var data = raw;
+      if(!Array.isArray(raw) && raw && typeof raw === "object"){
+        // optional repo metadata -> page title / tagline
+        var t = raw.name || raw.title || raw.repository_name;
+        if(t){ document.getElementById("title").textContent = t; document.title = t; }
+        if(raw.description){ document.getElementById("tagline").textContent = raw.description; }
+
+        // find the payload array: known keys first, then any array-of-objects value
+        var keys = ["payloads","items","repository","list","data","entries"];
+        for(var i=0;i<keys.length && !Array.isArray(data);i++){
+          if(Array.isArray(raw[keys[i]])) data = raw[keys[i]];
+        }
+        if(!Array.isArray(data)){
+          for(var k in raw){ if(Array.isArray(raw[k]) && raw[k].some(function(x){return x&&typeof x==="object";})){ data = raw[k]; break; } }
+        }
+        // single payload object (has download-ish fields) -> wrap as one-item list
+        if(!Array.isArray(data) && (raw.url || raw.filename)){ data = [raw]; }
+      }
+
+      if(!Array.isArray(data)){
+        throw new Error("JSON loaded, but no payload array found — expected an array, or an object with a \"payloads\" array");
+      }
       if(data.length === 0){
         grid.innerHTML = '<div class="state">No payloads listed yet. Add entries to <code>repository.json</code>.</div>';
         return;
