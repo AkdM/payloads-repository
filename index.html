@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Custom Payload Repository · PS5 Payload Manager</title>
+<meta name="description" content="A custom payload repository for the PS5 Payload Manager. Add the URL below to your manager to browse and install these payloads.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     CONFIG — edit these two lines to brand your repository
+     ============================================================ */
+  :root{
+    --repo-title: "Custom Payload Repository";
+    --repo-tagline: "A third-party payload source for the PS5 Payload Manager";
+  }
+
+  :root{
+    --bg:        #080b12;
+    --bg-2:      #0d121d;
+    --panel:     #111826;
+    --panel-2:   #161f31;
+    --line:      #20293c;
+    --line-2:    #2c3950;
+    --text:      #e6ecf7;
+    --text-dim:  #8a99b5;
+    --text-mute: #5b687f;
+    --accent:    #2e8bff;
+    --accent-2:  #4dd6ff;
+    --accent-glow: rgba(46,139,255,.35);
+    --good:      #3ddc97;
+    --radius:    14px;
+    --mono: "JetBrains Mono", ui-monospace, monospace;
+    --display: "Chakra Petch", sans-serif;
+    --body: "Sora", system-ui, sans-serif;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--body);
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  /* atmospheric background */
+  body::before{
+    content:"";
+    position:fixed; inset:0; z-index:-2;
+    background:
+      radial-gradient(900px 500px at 78% -10%, rgba(46,139,255,.16), transparent 60%),
+      radial-gradient(700px 500px at 10% 8%, rgba(77,214,255,.08), transparent 55%),
+      var(--bg);
+  }
+  body::after{
+    content:"";
+    position:fixed; inset:0; z-index:-1; opacity:.5;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size:46px 46px;
+    -webkit-mask-image:radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 80%);
+            mask-image:radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 80%);
+  }
+
+  .wrap{max-width:1040px;margin:0 auto;padding:0 22px}
+
+  /* ---------- top bar ---------- */
+  header.top{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:22px 22px;max-width:1040px;margin:0 auto;
+  }
+  .brand{display:flex;align-items:center;gap:11px;font-family:var(--display);font-weight:700;letter-spacing:.5px}
+  .brand .dot{
+    width:11px;height:11px;border-radius:50%;
+    background:var(--accent);box-shadow:0 0 14px var(--accent-glow);
+    animation:pulse 2.6s ease-in-out infinite;
+  }
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+  .brand span{color:var(--text-dim);font-size:.92rem}
+  .top a.gh{
+    font-family:var(--mono);font-size:.8rem;color:var(--text-dim);
+    text-decoration:none;border:1px solid var(--line-2);padding:8px 14px;border-radius:9px;
+    transition:.2s;
+  }
+  .top a.gh:hover{color:var(--text);border-color:var(--accent);background:rgba(46,139,255,.07)}
+
+  /* ---------- hero ---------- */
+  .hero{padding:40px 0 30px;text-align:center;animation:rise .7s ease both}
+  .eyebrow{
+    font-family:var(--mono);font-size:.74rem;letter-spacing:3px;text-transform:uppercase;
+    color:var(--accent-2);margin-bottom:18px;
+  }
+  .hero h1{
+    font-family:var(--display);font-weight:700;line-height:1.05;
+    font-size:clamp(2.3rem,6vw,3.9rem);letter-spacing:-.5px;
+  }
+  .hero h1 .grad{
+    background:linear-gradient(110deg,var(--accent) 10%,var(--accent-2) 90%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .hero p.tag{color:var(--text-dim);font-size:clamp(1rem,2.4vw,1.18rem);margin:18px auto 0;max-width:560px}
+
+  /* ---------- the URL card (the important bit) ---------- */
+  .url-card{
+    margin:38px auto 0;max-width:760px;
+    background:linear-gradient(180deg,var(--panel-2),var(--panel));
+    border:1px solid var(--line-2);border-radius:var(--radius);
+    padding:22px 24px;text-align:left;
+    box-shadow:0 24px 60px -28px rgba(46,139,255,.5);
+    animation:rise .7s .1s ease both;
+  }
+  .url-card .label{
+    font-family:var(--mono);font-size:.72rem;letter-spacing:2px;text-transform:uppercase;
+    color:var(--text-mute);margin-bottom:12px;display:flex;align-items:center;gap:8px;
+  }
+  .url-card .label::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--good);box-shadow:0 0 8px var(--good)}
+  .url-row{display:flex;gap:10px;flex-wrap:wrap}
+  .url-row code{
+    flex:1;min-width:240px;
+    font-family:var(--mono);font-size:.92rem;color:var(--accent-2);
+    background:var(--bg);border:1px solid var(--line);border-radius:10px;
+    padding:14px 16px;overflow-x:auto;white-space:nowrap;
+    display:flex;align-items:center;
+  }
+  button.copy{
+    font-family:var(--display);font-weight:600;letter-spacing:.5px;font-size:.92rem;
+    color:#04101f;background:linear-gradient(110deg,var(--accent),var(--accent-2));
+    border:none;border-radius:10px;padding:0 22px;cursor:pointer;
+    transition:transform .15s, box-shadow .2s;min-height:48px;white-space:nowrap;
+  }
+  button.copy:hover{transform:translateY(-2px);box-shadow:0 10px 24px -8px var(--accent-glow)}
+  button.copy:active{transform:translateY(0)}
+  button.copy.done{background:var(--good);color:#04130c}
+
+  /* ---------- steps ---------- */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:46px 0 10px;animation:rise .7s .2s ease both}
+  .step{
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    padding:20px;position:relative;transition:.25s;
+  }
+  .step:hover{border-color:var(--line-2);transform:translateY(-3px)}
+  .step .n{
+    font-family:var(--display);font-weight:700;font-size:.78rem;color:var(--accent-2);
+    border:1px solid var(--line-2);border-radius:7px;width:30px;height:30px;
+    display:flex;align-items:center;justify-content:center;margin-bottom:14px;
+  }
+  .step h3{font-family:var(--display);font-weight:600;font-size:1.02rem;margin-bottom:5px}
+  .step p{color:var(--text-dim);font-size:.9rem}
+  .step code{font-family:var(--mono);color:var(--accent-2);font-size:.85em}
+
+  /* ---------- section heading ---------- */
+  .sec-head{
+    display:flex;align-items:baseline;justify-content:space-between;gap:14px;
+    margin:60px 0 22px;border-bottom:1px solid var(--line);padding-bottom:14px;flex-wrap:wrap;
+  }
+  .sec-head h2{font-family:var(--display);font-weight:700;font-size:1.5rem;letter-spacing:.3px}
+  .sec-head .meta{font-family:var(--mono);font-size:.8rem;color:var(--text-mute)}
+  .sec-head .meta b{color:var(--accent-2);font-weight:500}
+
+  /* ---------- payload grid ---------- */
+  #grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px;padding-bottom:10px}
+  .pl{
+    background:linear-gradient(180deg,var(--panel),var(--bg-2));
+    border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px 18px 16px;display:flex;flex-direction:column;gap:11px;
+    transition:.25s;animation:rise .5s ease both;
+  }
+  .pl:hover{border-color:var(--accent);box-shadow:0 16px 40px -24px var(--accent-glow);transform:translateY(-3px)}
+  .pl .h{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+  .pl .name{font-family:var(--display);font-weight:600;font-size:1.08rem;word-break:break-word}
+  .pl .ver{
+    font-family:var(--mono);font-size:.72rem;color:var(--accent-2);
+    background:rgba(46,139,255,.1);border:1px solid var(--line-2);
+    padding:3px 8px;border-radius:20px;white-space:nowrap;flex-shrink:0;
+  }
+  .pl .desc{color:var(--text-dim);font-size:.88rem;flex:1}
+  .pl .foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:2px;padding-top:11px;border-top:1px solid var(--line)}
+  .pl .date{font-family:var(--mono);font-size:.74rem;color:var(--text-mute)}
+  .pl .links{display:flex;gap:8px;align-items:center}
+  .pl .links a{
+    font-family:var(--mono);font-size:.76rem;text-decoration:none;
+    padding:6px 11px;border-radius:8px;transition:.18s;border:1px solid var(--line-2);
+  }
+  .pl .links a.dl{color:#04101f;background:linear-gradient(110deg,var(--accent),var(--accent-2));border:none;font-weight:700}
+  .pl .links a.dl:hover{filter:brightness(1.1)}
+  .pl .links a.src{color:var(--text-dim)}
+  .pl .links a.src:hover{color:var(--text);border-color:var(--accent)}
+
+  /* states */
+  .state{
+    grid-column:1/-1;text-align:center;padding:46px 20px;
+    border:1px dashed var(--line-2);border-radius:var(--radius);color:var(--text-dim);
+  }
+  .state.err{border-color:#5a2a33;background:rgba(255,90,90,.04)}
+  .state code{font-family:var(--mono);color:var(--accent-2);font-size:.85em}
+  .spin{
+    width:26px;height:26px;border:3px solid var(--line-2);border-top-color:var(--accent);
+    border-radius:50%;margin:0 auto 14px;animation:spin .8s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* ---------- schema details ---------- */
+  details.schema{
+    margin-top:46px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;
+  }
+  details.schema summary{
+    cursor:pointer;padding:18px 20px;font-family:var(--display);font-weight:600;
+    list-style:none;display:flex;align-items:center;justify-content:space-between;
+  }
+  details.schema summary::-webkit-details-marker{display:none}
+  details.schema summary .chev{color:var(--accent-2);transition:.2s;font-family:var(--mono)}
+  details.schema[open] summary .chev{transform:rotate(90deg)}
+  details.schema .body{padding:0 20px 22px;border-top:1px solid var(--line)}
+  details.schema pre{
+    font-family:var(--mono);font-size:.82rem;color:var(--text-dim);
+    background:var(--bg);border:1px solid var(--line);border-radius:10px;
+    padding:16px;overflow-x:auto;margin-top:16px;line-height:1.7;
+  }
+  details.schema pre .k{color:var(--accent-2)}
+  details.schema pre .c{color:var(--text-mute);font-style:italic}
+  details.schema .req{color:var(--good)}
+  details.schema p{color:var(--text-dim);font-size:.9rem;margin-top:14px}
+  details.schema a{color:var(--accent-2)}
+
+  /* ---------- footer ---------- */
+  footer{
+    margin-top:70px;border-top:1px solid var(--line);padding:30px 0 50px;
+    color:var(--text-mute);font-size:.84rem;text-align:center;
+  }
+  footer a{color:var(--text-dim);text-decoration:none;border-bottom:1px dotted var(--line-2)}
+  footer a:hover{color:var(--accent-2)}
+  footer .disc{margin-top:14px;font-size:.78rem;max-width:640px;margin-left:auto;margin-right:auto;color:var(--text-mute)}
+  footer .disc.made{margin-top:18px;font-style:italic;opacity:.85}
+
+  @keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+
+  @media(max-width:680px){
+    .steps{grid-template-columns:1fr}
+    button.copy{width:100%}
+  }
+
+  .toast{
+    position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--panel-2);border:1px solid var(--accent);color:var(--text);
+    font-family:var(--mono);font-size:.82rem;padding:11px 18px;border-radius:10px;
+    opacity:0;pointer-events:none;transition:.3s;z-index:50;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">
+    <span class="dot"></span>
+    <span>PS5 Payload Repository</span>
+  </div>
+  <a class="gh" id="ghLink" href="#" target="_blank" rel="noopener">View source ↗</a>
+</header>
+
+<main class="wrap">
+
+  <section class="hero">
+    <div class="eyebrow">Custom Repository · repository.json</div>
+    <h1 id="title">Custom <span class="grad">Payload</span> Repository</h1>
+    <p class="tag" id="tagline">A third-party payload source for the PS5 Payload Manager.</p>
+
+    <div class="url-card">
+      <div class="label">Repository URL — paste this into the manager</div>
+      <div class="url-row">
+        <code id="repoUrl">loading…</code>
+        <button class="copy" id="copyBtn">Copy</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="steps">
+    <div class="step">
+      <div class="n">1</div>
+      <h3>Copy the URL</h3>
+      <p>Grab the <code>repository.json</code> URL above with the copy button.</p>
+    </div>
+    <div class="step">
+      <div class="n">2</div>
+      <h3>Add it in the app</h3>
+      <p>Open PS5 Payload Manager → <b>Repositories</b> → add a new source and paste the URL.</p>
+    </div>
+    <div class="step">
+      <div class="n">3</div>
+      <h3>Browse &amp; install</h3>
+      <p>The payloads below appear in the app, ready to download and load on your PS5.</p>
+    </div>
+  </section>
+
+  <div class="sec-head">
+    <h2>Payloads in this repository</h2>
+    <div class="meta" id="stats"></div>
+  </div>
+
+  <div id="grid">
+    <div class="state"><div class="spin"></div>Loading <code>repository.json</code>…</div>
+  </div>
+
+  <details class="schema">
+    <summary>Repository format <span class="chev">▸</span></summary>
+    <div class="body">
+      <p><code>repository.json</code> is a JSON array of payload objects. Fields marked <span class="req">●</span> are required.</p>
+<pre>[
+  {
+    <span class="k">"name"</span>:        "websrv",              <span class="c">// <span class="req">●</span> display name</span>
+    <span class="k">"filename"</span>:    "websrv_v0.32.elf",    <span class="c">// <span class="req">●</span> saved filename (.elf / .bin)</span>
+    <span class="k">"url"</span>:         "https://.../file.elf",<span class="c">// <span class="req">●</span> direct download link</span>
+    <span class="k">"version"</span>:     "v0.32",               <span class="c">// version string</span>
+    <span class="k">"description"</span>: "A simple web server…", <span class="c">// short description</span>
+    <span class="k">"last_update"</span>: "2026-05-25",            <span class="c">// YYYY-MM-DD</span>
+    <span class="k">"checksum"</span>:    "8dd24df1…",            <span class="c">// sha-256 of the file</span>
+    <span class="k">"source"</span>:      "https://github.com/…", <span class="c">// project releases page (optional)</span>
+    <span class="k">"extract_file"</span>:"payload.elf"           <span class="c">// file to pull from a .zip (optional)</span>
+  }
+]</pre>
+      <p>Edit <code>repository.json</code> at the root of this repo, commit, and the changes go live automatically.
+      See the <a href="https://github.com/itsPLK/ps5-payload-manager" target="_blank" rel="noopener">PS5 Payload Manager</a> Custom Repositories Guide for full details.</p>
+    </div>
+  </details>
+
+</main>
+
+<footer class="wrap">
+  Hosted with GitHub Pages · powered by
+  <a href="https://github.com/itsPLK/ps5-payload-manager" target="_blank" rel="noopener">PS5 Payload Manager</a>
+  <div class="disc">
+    This is a community payload index. All payloads are the work of their respective developers;
+    this repository only links to them. Use homebrew at your own risk.
+  </div>
+  <div class="disc made">
+    Yep, this page was fully generated by Claude — because who cares, I wasn't about to spend
+    more than 2 minutes on it.
+  </div>
+</footer>
+
+<div class="toast" id="toast">Copied to clipboard</div>
+
+<script>
+(function(){
+  // ---- resolve this page's repository.json URL automatically ----
+  var repoJsonUrl = new URL("repository.json", window.location.href).href;
+  var urlEl = document.getElementById("repoUrl");
+  urlEl.textContent = repoJsonUrl;
+
+  // link "View source" to the repo root (works on github.io project pages)
+  var ghLink = document.getElementById("ghLink");
+  try{
+    var host = window.location.hostname;        // user.github.io
+    var seg  = window.location.pathname.split("/").filter(Boolean);
+    if(host.endsWith("github.io") && seg.length){
+      ghLink.href = "https://github.com/" + host.split(".")[0] + "/" + seg[0];
+    } else { ghLink.style.display = "none"; }
+  }catch(e){ ghLink.style.display = "none"; }
+
+  // ---- copy button ----
+  var toast = document.getElementById("toast");
+  function showToast(msg){
+    toast.textContent = msg; toast.classList.add("show");
+    clearTimeout(toast._t); toast._t = setTimeout(function(){toast.classList.remove("show")},1800);
+  }
+  var btn = document.getElementById("copyBtn");
+  btn.addEventListener("click", function(){
+    navigator.clipboard.writeText(repoJsonUrl).then(function(){
+      btn.textContent = "Copied ✓"; btn.classList.add("done");
+      showToast("Repository URL copied");
+      setTimeout(function(){ btn.textContent="Copy"; btn.classList.remove("done"); },1800);
+    }).catch(function(){ showToast("Copy failed — select manually"); });
+  });
+
+  // ---- helpers ----
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+
+  // ---- load + render payloads ----
+  var grid = document.getElementById("grid");
+  var statsEl = document.getElementById("stats");
+
+  fetch(repoJsonUrl, {cache:"no-store"})
+    .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
+    .then(function(data){
+      if(!Array.isArray(data)) throw new Error("not an array");
+      if(data.length === 0){
+        grid.innerHTML = '<div class="state">No payloads listed yet. Add entries to <code>repository.json</code>.</div>';
+        return;
+      }
+
+      // newest first by last_update
+      data.sort(function(a,b){ return String(b.last_update||"").localeCompare(String(a.last_update||"")); });
+
+      var newest = data.reduce(function(m,p){ return (p.last_update>m)?p.last_update:m; }, "");
+      statsEl.innerHTML = "<b>"+data.length+"</b> payload"+(data.length!==1?"s":"")+
+                          (newest?" · updated <b>"+esc(newest)+"</b>":"");
+
+      grid.innerHTML = "";
+      data.forEach(function(p, i){
+        var card = document.createElement("div");
+        card.className = "pl";
+        card.style.animationDelay = (i*0.04)+"s";
+
+        var srcLink = p.source ? '<a class="src" href="'+esc(p.source)+'" target="_blank" rel="noopener">source ↗</a>' : "";
+        var dlLink  = p.url    ? '<a class="dl" href="'+esc(p.url)+'" target="_blank" rel="noopener">Download</a>' : "";
+
+        card.innerHTML =
+          '<div class="h">' +
+            '<div class="name">'+esc(p.name||p.filename||"Untitled")+'</div>' +
+            (p.version ? '<div class="ver">'+esc(p.version)+'</div>' : '') +
+          '</div>' +
+          '<div class="desc">'+esc(p.description||"No description provided.")+'</div>' +
+          '<div class="foot">' +
+            '<span class="date">'+ (p.last_update?esc(p.last_update):'') +'</span>' +
+            '<span class="links">'+srcLink+dlLink+'</span>' +
+          '</div>';
+        grid.appendChild(card);
+      });
+    })
+    .catch(function(err){
+      grid.innerHTML =
+        '<div class="state err">' +
+          'Could not load <code>repository.json</code> (' + esc(err.message) + ').<br><br>' +
+          'This page reads the file next to it — it works once hosted on GitHub Pages ' +
+          'with <code>repository.json</code> in the repo root.' +
+        '</div>';
+      statsEl.textContent = "";
+    });
+})();
+</script>
+</body>
+</html>
