@@ -3,10 +3,10 @@
   "payloads": [
     {
       "name": "PS5 App Dumper",
-      "filename": "ps5-app-dumper-v1.10.elf",
+      "filename": "ps5-app-dumper-v1.10-beta.elf",
       "url": "https://github.com/EchoStretch/ps5-app-dumper/releases/download/v1.10/ps5-app-dumper.elf",
       "description": "Utility to dump PS5 application files from the console's pfsmnt",
-      "version": "v1.10"
+      "version": "v1.10-beta"
     },
     {
       "name": "PS5 Payload Manager",
