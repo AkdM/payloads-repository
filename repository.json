@@ -7,6 +7,55 @@
       "url": "https://github.com/EchoStretch/ps5-app-dumper/releases/download/v1.10/ps5-app-dumper.elf",
       "description": "Utility to dump PS5 application files from the console's pfsmnt",
       "version": "v1.10"
-    }
+    },
+    {
+      "name": "PS5 Payload Manager",
+      "filename": "pldmgr-v0.3.1.elf",
+      "url": "https://github.com/itsPLK/ps5-payload-manager/releases/download/v0.3.1/pldmgr_v0.3.1.elf",
+      "description": "A modern, web-based dashboard to easily manage, import, and automatically load payloads on your PS5",
+      "version": "v0.3.1"
+    },
+    {
+      "name": "ftpsrv",
+      "filename": "ftpsrv-ps5-v0.20.elf",
+      "url": "https://github.com/ps5-payload-dev/ftpsrv/releases/download/v0.20/ftpsrv-ps5.elf",
+      "description": "A simple FTP server for jailbroken PS4s and PS5s",
+      "version": "v0.20"
+    },
+    {
+      "name": "kstuff-lite",
+      "filename": "kstuff-lite-echostretch-v1.08-beta.elf",
+      "url": "https://github.com/EchoStretch/kstuff-lite/releases/download/v1.08/kstuff.elf",
+      "description": "",
+      "version": "v1.08-beta"
+    },
+    {
+      "name": "kstuff-lite (EchoStretch)",
+      "filename": "ShadowMountPlus-1.6beta16.elf",
+      "url": "https://github.com/drakmor/ShadowMountPlus/releases/download/1.6beta16/shadowmountplus.elf",
+      "description": "Automated background auto-mounter payload for jailbroken PS5 consoles. Detects, mounts, and installs game backups from internal or external storage, with support for UFS, exFAT, PFS, and nested compressed PFS containers",
+      "version": "v1.6beta16"
+    },
+    {
+      "name": "CheatRunner",
+      "filename": "CheatRunner-v0.14.elf",
+      "url": "https://github.com/notmaj0r/CheatRunner/releases/download/v0.14/CheatRunner.elf",
+      "description": "CheatRunner is a Cheat Trainer for PS5.",
+      "version": "v0.14"
+    },
+    {
+      "name": "Elf Arsenal",
+      "filename": "elf-arsenal-v1.6.21.elf",
+      "url": "https://git.etawen.dev/soniciso/elf-arsenal/releases/download/v1.6.21/elf-arsenal.elf",
+      "description": "One ELF you send to elfldr that wires up cheats, save management, FTP, a trophy-unlocker stack, ShadowMountPlus, kstuff-lite, the PS5 Linux loader, fan control, NP fake sign-in, and a full web UI on :6969",
+      "version": "v1.6.21"
+    },
+    {
+      "name": "Pegasus DL",
+      "filename": "pegasus_dl-v1.7.0.elf",
+      "url": "https://github.com/pegasus-ps5/pegasus-dl/releases/download/v1.7.0/pegasus_dl.elf",
+      "description": "Direct package downloading from your PS5",
+      "version": "v1.7.0"
+    },
   ]
 }
